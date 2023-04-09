@@ -14,6 +14,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import Cross from './Cross';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const GridImageView = ({
   data,
@@ -70,18 +71,21 @@ const GridImageView = ({
                 backgroundColor: `rgba(0, 0, 0, ${transparent})`,
               })
             ) : (
-              <Image
-                style={{
-                  ...styles.img_modal,
-                  backgroundColor: `rgba(0, 0, 0, ${transparent})`,
-                }}
-                source={{
-                  uri: item,
-                  ...(headers == null || headers == undefined || headers == {}
-                    ? {}
-                    : { method: 'POST', headers }), cache: "reload"
-                }}
-              />
+              <>
+                <ActivityIndicator size='large' style={{ position: 'absolute', left: wp(45), top: hp(45) }} color="rgb(111, 144, 58)" />
+                <Image
+                  style={{
+                    ...styles.img_modal,
+                    backgroundColor: `rgba(0, 0, 0, ${transparent})`,
+                  }}
+                  source={{
+                    uri: item,
+                    ...(headers == null || headers == undefined || headers == {}
+                      ? {}
+                      : { method: 'POST', headers }), cache: "reload"
+                  }}
+                />
+              </>
             )}
           </View>
         ))}
@@ -120,7 +124,7 @@ const GridImageView = ({
           return (
             <View style={styles.unit}>
               <View style={[styles.unit_item, { height: heightOfGridImage }]}>
-                {(isLoadingRow1 && data[index * 3] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10 }} color="rgb(111, 144, 58)" />)}
+                {(isLoadingRow1 && data[index * 3] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10, paddingTop: 40 }} color="rgb(111, 144, 58)" />)}
                 {data.length > index * 3 ? (
                   <TouchableOpacity
                     onPress={() => {
@@ -160,7 +164,7 @@ const GridImageView = ({
                 ) : null}
               </View>
               <View style={[styles.unit_item, { height: heightOfGridImage }]}>
-                {(isLoadingRow2 && data[index * 3 + 1] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10 }} color="rgb(111, 144, 58)" />)}
+                {(isLoadingRow2 && data[index * 3 + 1] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10, paddingTop: 40 }} color="rgb(111, 144, 58)" />)}
                 {data.length > index * 3 + 1 ? (
                   <TouchableOpacity
                     onPress={() => {
@@ -201,7 +205,7 @@ const GridImageView = ({
                 ) : null}
               </View>
               <View style={[styles.unit_item, { height: heightOfGridImage }]}>
-                {(isLoadingRow3 && data[index * 3 + 2] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10 }} color="rgb(111, 144, 58)" />)}
+                {(isLoadingRow3 && data[index * 3 + 2] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10, paddingTop: 40 }} color="rgb(111, 144, 58)" />)}
                 {data.length > index * 3 + 2 ? (
                   <TouchableOpacity
                     onPress={() => {
