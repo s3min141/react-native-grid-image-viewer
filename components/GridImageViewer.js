@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -11,6 +11,7 @@ import {
   Platform,
   NativeModules,
   BackHandler,
+  ActivityIndicator
 } from 'react-native';
 import Cross from './Cross';
 
@@ -23,17 +24,20 @@ const GridImageView = ({
   customOnPress = null,
   heightOfGridImage = Dimensions.get('window').height / 5.5,
 }) => {
-  const [modal, setModal] = useState({visible: false, data: 0});
+  const [modal, setModal] = useState({ visible: false, data: 0 });
+  const [isLoadingRow1, setIsLoadingRow1] = useState(false);
+  const [isLoadingRow2, setIsLoadingRow2] = useState(false);
+  const [isLoadingRow3, setIsLoadingRow3] = useState(false);
   const ref = useRef();
   var key = 0;
 
-  const {StatusBarManager} = NativeModules;
+  const { StatusBarManager } = NativeModules;
   const STATUSBAR_HEIGHT =
     Platform.OS === 'ios' ? 20 : StatusBarManager.HEIGHT - 20;
   const [height, setHeight] = useState(STATUSBAR_HEIGHT);
 
   const onCloseModal = () => {
-    setModal({visible: false, data: 0});
+    setModal({ visible: false, data: 0 });
   };
 
   useEffect(() => {
@@ -48,12 +52,12 @@ const GridImageView = ({
     };
   }, []);
 
-  const Component = ({style = {flex: 1}}) => {
+  const Component = ({ style = { flex: 1 } }) => {
     return (
       <ScrollView
         showsHorizontalScrollIndicator={false}
         ref={ref}
-        style={{...style}}
+        style={{ ...style }}
         snapToInterval={Dimensions.get('window').width}
         decelerationRate="fast"
         pagingEnabled
@@ -75,7 +79,7 @@ const GridImageView = ({
                   uri: item,
                   ...(headers == null || headers == undefined || headers == {}
                     ? {}
-                    : {method: 'POST', headers}),
+                    : { method: 'POST', headers }), cache: "reload"
                 }}
               />
             )}
@@ -95,10 +99,10 @@ const GridImageView = ({
         onRequestClose={onCloseModal}>
         <Component />
 
-        <View style={{...styles.cross, top: height + 5}}>
+        <View style={{ ...styles.cross, top: height + 5 }}>
           <TouchableOpacity
             onPress={() => {
-              setModal({visible: false, data: 0});
+              setModal({ visible: false, data: 0 });
             }}>
             <Cross />
           </TouchableOpacity>
@@ -106,22 +110,22 @@ const GridImageView = ({
       </Modal>
 
       <FlatList
-        contentContainerStyle={{paddingBottom: 40}}
+        contentContainerStyle={{ paddingBottom: 40 }}
         data={data}
         renderItem={({ index }) => {
-          console.log(index);
           if (data.length <= index * 3) {
             return null;
           }
+
           return (
             <View style={styles.unit}>
-              <View style={[styles.unit_item, {height: heightOfGridImage}]}>
+              <View style={[styles.unit_item, { height: heightOfGridImage }]}>
+                {(isLoadingRow1 && data[index * 3] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10 }} color="rgb(111, 144, 58)" />)}
                 {data.length > index * 3 ? (
                   <TouchableOpacity
                     onPress={() => {
                       if (customOnPress === null) {
-                        setModal({visible: true, data: index * 3});
-
+                        setModal({ visible: true, data: index * 3 });
                         setTimeout(() => {
                           ref.current.scrollTo({
                             x: Dimensions.get('window').width * index * 3,
@@ -134,31 +138,34 @@ const GridImageView = ({
                         customOnPress(index * 3);
                       }
                     }}
-                    style={[styles.unit_item, {height: heightOfGridImage}]}>
+                    style={[styles.unit_item, { height: heightOfGridImage }]}>
                     {renderGridImage !== null ? (
                       renderGridImage(data[index * 3], styles.img)
                     ) : (
                       <Image
                         style={styles.img}
+                        onLoadStart={() => { setIsLoadingRow1(true); }}
+                        onLoadEnd={() => { setIsLoadingRow1(false); }}
                         source={{
                           uri: data[index * 3],
                           ...(headers == null ||
-                          headers == undefined ||
-                          headers == {}
+                            headers == undefined ||
+                            headers == {}
                             ? {}
-                            : {method: 'POST', headers}),
+                            : { method: 'POST', headers }), cache: "reload"
                         }}
                       />
                     )}
                   </TouchableOpacity>
                 ) : null}
               </View>
-              <View style={[styles.unit_item, {height: heightOfGridImage}]}>
+              <View style={[styles.unit_item, { height: heightOfGridImage }]}>
+                {(isLoadingRow2 && data[index * 3 + 1] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10 }} color="rgb(111, 144, 58)" />)}
                 {data.length > index * 3 + 1 ? (
                   <TouchableOpacity
                     onPress={() => {
                       if (customOnPress === null) {
-                        setModal({visible: true, data: index * 3 + 1});
+                        setModal({ visible: true, data: index * 3 + 1 });
 
                         setTimeout(() => {
                           ref.current.scrollTo({
@@ -172,31 +179,34 @@ const GridImageView = ({
                         customOnPress(index * 3 + 1);
                       }
                     }}
-                    style={[styles.unit_item, {height: heightOfGridImage}]}>
+                    style={[styles.unit_item, { height: heightOfGridImage }]}>
                     {renderGridImage !== null ? (
                       renderGridImage(data[index * 3 + 1], styles.img)
                     ) : (
                       <Image
                         style={styles.img}
+                        onLoadStart={() => { setIsLoadingRow2(true); }}
+                        onLoadEnd={() => { setIsLoadingRow2(false); }}
                         source={{
                           uri: data[index * 3 + 1],
                           ...(headers == null ||
-                          headers == undefined ||
-                          headers == {}
+                            headers == undefined ||
+                            headers == {}
                             ? {}
-                            : {method: 'POST', headers}),
+                            : { method: 'POST', headers }), cache: "reload"
                         }}
                       />
                     )}
                   </TouchableOpacity>
                 ) : null}
               </View>
-              <View style={[styles.unit_item, {height: heightOfGridImage}]}>
+              <View style={[styles.unit_item, { height: heightOfGridImage }]}>
+                {(isLoadingRow3 && data[index * 3 + 2] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10 }} color="rgb(111, 144, 58)" />)}
                 {data.length > index * 3 + 2 ? (
                   <TouchableOpacity
                     onPress={() => {
                       if (customOnPress === null) {
-                        setModal({visible: true, data: index * 3 + 2});
+                        setModal({ visible: true, data: index * 3 + 2 });
 
                         setTimeout(() => {
                           ref.current.scrollTo({
@@ -210,19 +220,21 @@ const GridImageView = ({
                         customOnPress(index * 3 + 2);
                       }
                     }}
-                    style={[styles.unit_item, {height: heightOfGridImage}]}>
+                    style={[styles.unit_item, { height: heightOfGridImage }]}>
                     {renderGridImage !== null ? (
                       renderGridImage(data[index * 3 + 2], styles.img)
                     ) : (
                       <Image
                         style={styles.img}
+                        onLoadStart={() => { setIsLoadingRow3(true); }}
+                        onLoadEnd={() => { setIsLoadingRow3(false); }}
                         source={{
                           uri: data[index * 3 + 2],
                           ...(headers == null ||
-                          headers == undefined ||
-                          headers == {}
+                            headers == undefined ||
+                            headers == {}
                             ? {}
-                            : {method: 'POST', headers}),
+                            : { method: 'POST', headers }), cache: "reload"
                         }}
                       />
                     )}
