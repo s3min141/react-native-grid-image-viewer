@@ -124,7 +124,7 @@ const GridImageView = ({
           return (
             <View style={styles.unit}>
               <View style={[styles.unit_item, { height: heightOfGridImage }]}>
-                {(isLoadingRow1 && data[index * 3] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10, paddingTop: 40 }} color="rgb(111, 144, 58)" />)}
+                {(isLoadingRow1 && data[index * 3] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10 }} color="rgb(111, 144, 58)" />)}
                 {data.length > index * 3 ? (
                   <TouchableOpacity
                     onPress={() => {
@@ -164,7 +164,7 @@ const GridImageView = ({
                 ) : null}
               </View>
               <View style={[styles.unit_item, { height: heightOfGridImage }]}>
-                {(isLoadingRow2 && data[index * 3 + 1] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10, paddingTop: 40 }} color="rgb(111, 144, 58)" />)}
+                {(isLoadingRow2 && data[index * 3 + 1] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10 }} color="rgb(111, 144, 58)" />)}
                 {data.length > index * 3 + 1 ? (
                   <TouchableOpacity
                     onPress={() => {
@@ -205,7 +205,7 @@ const GridImageView = ({
                 ) : null}
               </View>
               <View style={[styles.unit_item, { height: heightOfGridImage }]}>
-                {(isLoadingRow3 && data[index * 3 + 2] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10, paddingTop: 40 }} color="rgb(111, 144, 58)" />)}
+                {(isLoadingRow3 && data[index * 3 + 2] !== undefined) && (<ActivityIndicator size='large' style={{ padding: 10 }} color="rgb(111, 144, 58)" />)}
                 {data.length > index * 3 + 2 ? (
                   <TouchableOpacity
                     onPress={() => {
